@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/azul"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:context=".CasdastroActivity">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:srcCompat="@drawable/logo" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Cadastre-se"
+            android:textColor="#FFFFFF"
+            android:textSize="48sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:text="E matenha-se sempre hidratado(a)!"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/NomeField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Nome"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/emailField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:foregroundTint="#FFFFFF"
+            android:hint="Email"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:counterOverflowTextColor="@color/white"
+            app:counterTextColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:endIconTint="@color/white"
+            app:hintTextColor="@color/white"
+            app:passwordToggleTint="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/senhaField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Senha"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nascimentoField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Data de Nascimento"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/pesoField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Peso (Ex: 60)"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alturaField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Altura (Ex: 1.70)"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/horaAcordaField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Horário que acorda (Ex: 07:00)"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/horaDormeField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Horário que dorme (Ex: 23:30)"
+            android:textColorHint="@color/white"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeErrorColor="@color/white"
+            app:cursorColor="#FFFFFF"
+            app:hintTextColor="@color/white"
+            app:placeholderTextColor="@color/white">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textColorLink="#FFFFFF" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/cadastrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="@color/ciano"
+            android:text="Cadastrar"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+</ScrollView>
