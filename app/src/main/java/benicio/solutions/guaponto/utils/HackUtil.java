@@ -2,6 +2,9 @@ package benicio.solutions.guaponto.utils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class HackUtil {
     public static String gerarHash(String valor) {
@@ -18,6 +21,18 @@ public class HackUtil {
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public static boolean isDateTimeString(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+        dateFormat.setLenient(false); // Para evitar interpretações estranhas
+
+        try {
+            Date date = dateFormat.parse(dateString);
+            return date != null;
+        } catch (ParseException e) {
+            return false;
         }
     }
 }

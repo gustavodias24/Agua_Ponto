@@ -22,7 +22,9 @@ import benicio.solutions.guaponto.databinding.ActivityContagemAguaBinding;
 import benicio.solutions.guaponto.databinding.ActivityLoginBinding;
 import benicio.solutions.guaponto.databinding.DefinirAguaIngeridaLayoutBinding;
 import benicio.solutions.guaponto.model.RotinaModel;
+import benicio.solutions.guaponto.model.UsuarioModel;
 import benicio.solutions.guaponto.retrofitUtils.RetrofitUtil;
+import benicio.solutions.guaponto.utils.HackUtil;
 import benicio.solutions.guaponto.utils.PrefsUser;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +48,8 @@ public class ContagemAguaActivity extends AppCompatActivity {
         mainBinding.adicionarAgu.setOnClickListener(v -> dialogAddAgua.show());
 
         configurarDialogAgua();
+
+        atualizarMl();
     }
 
     private void configurarDialogAgua() {
@@ -80,6 +84,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             dialogAddAgua.dismiss();
                             viewDialog.mlField.getEditText().setText("");
+                            atualizarMl();
                         } else {
                             Toast.makeText(ContagemAguaActivity.this, "Erro de conexão.", Toast.LENGTH_SHORT).show();
                         }
@@ -114,6 +119,36 @@ public class ContagemAguaActivity extends AppCompatActivity {
         });
 
         popupMenu.show();
+    }
+
+    private void atualizarMl() {
+        mainBinding.aguaCounter.setText("...");
+        RetrofitUtil.createServiceApi(
+                RetrofitUtil.createRetrofit()
+        ).getUser(PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<UsuarioModel>() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
+                if (response.isSuccessful()) {
+
+                    mainBinding.saudacao.setText("Olá, " + response.body().getNome());
+                    int counter = 0;
+                    for (RotinaModel rotinaModel : response.body().getRotinas().get$values()) {
+                        if (HackUtil.isDateTimeString(rotinaModel.getIngestao())) {
+                            counter += rotinaModel.getMlIngerido();
+                        }
+                    }
+                    mainBinding.aguaCounter.setText(counter + "");
+                } else {
+                    mainBinding.aguaCounter.setText("error");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
+                mainBinding.aguaCounter.setText("error");
+            }
+        });
     }
 
 

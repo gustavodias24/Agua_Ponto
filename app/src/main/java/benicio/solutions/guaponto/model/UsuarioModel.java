@@ -1,13 +1,25 @@
 package benicio.solutions.guaponto.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioModel {
     String email, senha, nome, sobrenome, dataNascimento, rotinaAcorda, rotinaDorme;
     double peso;
     int id, idade, mediaAgua;
+    RotinasUser rotinas;
+
+
 
     public UsuarioModel() {
+    }
+
+    public RotinasUser getRotinas() {
+        return rotinas;
+    }
+
+    public void setRotinas(RotinasUser rotinas) {
+        this.rotinas = rotinas;
     }
 
     public String getEmail() {
@@ -98,3 +110,4 @@ public class UsuarioModel {
         this.mediaAgua = mediaAgua;
     }
 }
+
