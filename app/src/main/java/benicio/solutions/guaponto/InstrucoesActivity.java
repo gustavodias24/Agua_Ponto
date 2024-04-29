@@ -1,5 +1,6 @@
 package benicio.solutions.guaponto;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,7 +50,8 @@ public class InstrucoesActivity extends AppCompatActivity {
                 index++;
 
             } catch (ArrayIndexOutOfBoundsException e) {
-                Toast.makeText(this, "Indo pra tela principal...", Toast.LENGTH_SHORT).show();
+                finish();
+                startActivity(new Intent(this, LoginActivity.class));
             }
 
         });
