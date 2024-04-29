@@ -98,7 +98,3 @@ public class UsuarioModel {
         this.mediaAgua = mediaAgua;
     }
 }
-
-class Rotina {
-//    List<>  $values = new ArrayList();
-}
