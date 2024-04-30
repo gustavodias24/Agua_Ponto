@@ -1,13 +1,18 @@
 package benicio.solutions.guaponto;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
@@ -23,12 +28,24 @@ import com.github.mikephil.charting.data.LineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import benicio.solutions.guaponto.adapter.AdapterAguaDiaria;
 import benicio.solutions.guaponto.databinding.ActivityRelatorioBinding;
 import benicio.solutions.guaponto.model.AguaModel;
+import benicio.solutions.guaponto.model.BodyGetRotinas;
+import benicio.solutions.guaponto.model.RotinaModel;
+import benicio.solutions.guaponto.retrofitUtils.RetrofitUtil;
+import benicio.solutions.guaponto.utils.HackUtil;
+import benicio.solutions.guaponto.utils.PrefsUser;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RelatorioActivity extends AppCompatActivity {
 
     private ActivityRelatorioBinding mainBinding;
+    private List<RotinaModel> rotinasDiaria = new ArrayList<>();
+    private AdapterAguaDiaria adapterAguaDiaria;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +54,51 @@ public class RelatorioActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        mainBinding.voltar.setOnClickListener( v -> finish());
+        mainBinding.voltar.setOnClickListener(v -> finish());
 
         showBarChart();
         initBarChart();
+        configurarRecyclerView();
     }
 
-    private void showBarChart(){
+    private void configurarRecyclerView() {
+        mainBinding.recy.setLayoutManager(new LinearLayoutManager(this));
+        mainBinding.recy.setHasFixedSize(true);
+//        mainBinding.recy.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        adapterAguaDiaria = new AdapterAguaDiaria(rotinasDiaria, this);
+        mainBinding.recy.setAdapter(adapterAguaDiaria);
+
+        RetrofitUtil.createServiceApi(RetrofitUtil.createRetrofit()).getRotinas(PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<BodyGetRotinas>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onResponse(Call<BodyGetRotinas> call, Response<BodyGetRotinas> response) {
+                if (response.isSuccessful()) {
+                    for (RotinaModel rotina : response.body().get$values()) {
+                        Log.d("mayara", "onResponse: " + rotina.getIngestao());
+                        if (HackUtil.isToday(rotina.getIngestao())) {
+                            rotinasDiaria.add(rotina);
+                        }
+                    }
+                    adapterAguaDiaria.notifyDataSetChanged();
+                } else {
+                    Toast.makeText(RelatorioActivity.this, "Problema no servidor...", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BodyGetRotinas> call, Throwable throwable) {
+                Toast.makeText(RelatorioActivity.this, "Problema de conexão", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void showBarChart() {
         ArrayList<Double> valueList = new ArrayList<Double>();
         ArrayList<BarEntry> entries = new ArrayList<>();
         String title = "Title";
 
         //input data
-        for(int i = 0; i < 6; i++){
+        for (int i = 0; i < 6; i++) {
             valueList.add(i * 100.1);
         }
 
@@ -66,7 +115,7 @@ public class RelatorioActivity extends AppCompatActivity {
         mainBinding.chart.invalidate();
     }
 
-    private void initBarDataSet(BarDataSet barDataSet){
+    private void initBarDataSet(BarDataSet barDataSet) {
         //Changing the color of the bar
         barDataSet.setColor(ContextCompat.getColor(this, R.color.ciano));
         //Setting the size of the form in the legend
@@ -79,7 +128,7 @@ public class RelatorioActivity extends AppCompatActivity {
         barDataSet.setValueTextColor(Color.WHITE);
     }
 
-    private void initBarChart(){
+    private void initBarChart() {
         //hiding the grey background of the chart, default false if not set
         mainBinding.chart.setDrawGridBackground(false);
         //remove the bar shadow, default false if not set

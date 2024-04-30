@@ -165,7 +165,7 @@
             android:layout_marginTop="8dp"
             android:hint="Altura (Ex: 1.70)"
             android:textColorHint="@color/white"
-            android:visibility="gone"
+            android:visibility="visible"
             app:boxStrokeColor="@color/white"
             app:boxStrokeErrorColor="@color/white"
             app:cursorColor="#FFFFFF"

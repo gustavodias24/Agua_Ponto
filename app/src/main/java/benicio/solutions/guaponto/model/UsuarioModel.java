@@ -8,16 +8,43 @@ import java.util.Date;
 import java.util.List;
 
 public class UsuarioModel {
-    String email, senha, nome, sobrenome;
-    String dataNascimento;
-    String rotinaAcorda, rotinaDorme;
-    double peso;
-    int id, idade, mediaAgua;
-    RotinasUser rotinas;
+    String email = "", senha = "", nome = "", sobrenome = "";
+    String dataNascimento = "";
+    String rotinaAcorda = "", rotinaDorme = "";
+    double peso = 0, altura = 0;
 
+    int id, idade = 0, mediaAgua = 0;
 
+    RotinasUser rotinas = new RotinasUser();
+
+    @Override
+    public String toString() {
+        return "UsuarioModel{" +
+                "email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", nome='" + nome + '\'' +
+                ", sobrenome='" + sobrenome + '\'' +
+                ", dataNascimento='" + dataNascimento + '\'' +
+                ", rotinaAcorda='" + rotinaAcorda + '\'' +
+                ", rotinaDorme='" + rotinaDorme + '\'' +
+                ", peso=" + peso +
+                ", altura=" + altura +
+                ", id=" + id +
+                ", idade=" + idade +
+                ", mediaAgua=" + mediaAgua +
+                ", rotinas=" + rotinas +
+                '}';
+    }
 
     public UsuarioModel() {
+    }
+
+    public double getAltura() {
+        return altura;
+    }
+
+    public void setAltura(double altura) {
+        this.altura = altura;
     }
 
     public RotinasUser getRotinas() {

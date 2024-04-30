@@ -52,20 +52,15 @@ public class CasdastroActivity extends AppCompatActivity {
             String nome = mainBinding.NomeField.getEditText().getText().toString();
             String email = mainBinding.emailField.getEditText().getText().toString();
             String senha = mainBinding.senhaField.getEditText().getText().toString();
-            usuarioModel.setDataNascimento("2024-04-29T12:42:44.1311389");
-            usuarioModel.setRotinaAcorda("2024-04-29T12:42:44.1311389");
-            usuarioModel.setRotinaDorme("2024-04-29T12:42:44.1311389");
-//            try {
-//                String nascimento = formatDate(parseDate(mainBinding.nascimentoField.getEditText().getText().toString()));
-//                String horaAcorda = formatDate(parseDateTime(mainBinding.horaAcordaField.getEditText().getText().toString()));
-//                String horaDorme = formatDate(parseDateTime(mainBinding.horaDormeField.getEditText().getText().toString()));
+
+            String nascimento = mainBinding.nascimentoField.getEditText().getText().toString();
+            String horaAcorda = mainBinding.horaAcordaField.getEditText().getText().toString();
+            String horaDorme = mainBinding.horaDormeField.getEditText().getText().toString();
 
 
-//
-//            } catch (Exception e) {
-//                Toast.makeText(this, "Data/Hora inválido", Toast.LENGTH_SHORT).show();
-//                prosseguir = false;
-//            }
+            usuarioModel.setDataNascimento(nascimento);
+            usuarioModel.setRotinaAcorda(horaAcorda);
+            usuarioModel.setRotinaDorme(horaDorme);
 
             int pesoInt = 0;
             try {
@@ -73,8 +68,15 @@ public class CasdastroActivity extends AppCompatActivity {
                 pesoInt = Integer.parseInt(peso);
             } catch (Exception ignored) {
             }
-//            String altura = mainBinding.alturaField.getEditText().getText().toString();
 
+            double alturaDouble = 0;
+            try{
+                String altura = mainBinding.alturaField.getEditText().getText().toString();
+                alturaDouble = Double.parseDouble(altura.trim().replace(",", "."));
+            }catch (Exception ignored){}
+
+
+            usuarioModel.setAltura(alturaDouble);
 
             usuarioModel.setNome(nome);
             usuarioModel.setEmail(email);
@@ -95,9 +97,7 @@ public class CasdastroActivity extends AppCompatActivity {
                         } else {
                             Log.d("mayara", "onResponse: " + response.code());
                             Log.d("mayara", "onResponse: " + response.message());
-                            Log.d("mayara", "onResponse: " + usuarioModel.getDataNascimento());
-                            Log.d("mayara", "onResponse: " + usuarioModel.getRotinaAcorda());
-                            Log.d("mayara", "onResponse: " + usuarioModel.getRotinaDorme());
+                            Log.d("mayara", "onResponse: " + usuarioModel.toString());
                             Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -122,21 +122,4 @@ public class CasdastroActivity extends AppCompatActivity {
         return java.sql.Timestamp.valueOf(String.valueOf(localDateTime));
     }
 
-    private Date parseDate(String dateString) throws ParseException {
-        // Define o formato da data inserida pelo usuário
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
-        // Converte a string para um objeto Date
-        try {
-            return inputFormat.parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String formatDate(Date date) {
-        // Define o formato desejado para a data
-        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
-        // Formata a data conforme o formato desejado
-        return outputFormat.format(date);
-    }
 }
