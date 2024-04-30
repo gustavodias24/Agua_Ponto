@@ -25,7 +25,10 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import benicio.solutions.guaponto.adapter.AdapterAguaDiaria;
@@ -44,6 +47,7 @@ public class RelatorioActivity extends AppCompatActivity {
 
     private ActivityRelatorioBinding mainBinding;
     private List<RotinaModel> rotinasDiaria = new ArrayList<>();
+    private List<RotinaModel> todasRotinasDiaria = new ArrayList<>();
     private AdapterAguaDiaria adapterAguaDiaria;
 
     @Override
@@ -56,29 +60,56 @@ public class RelatorioActivity extends AppCompatActivity {
 
         mainBinding.voltar.setOnClickListener(v -> finish());
 
-        showBarChart();
-        initBarChart();
         configurarRecyclerView();
+
     }
 
     private void configurarRecyclerView() {
         mainBinding.recy.setLayoutManager(new LinearLayoutManager(this));
         mainBinding.recy.setHasFixedSize(true);
-//        mainBinding.recy.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapterAguaDiaria = new AdapterAguaDiaria(rotinasDiaria, this);
         mainBinding.recy.setAdapter(adapterAguaDiaria);
 
         RetrofitUtil.createServiceApi(RetrofitUtil.createRetrofit()).getRotinas(PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<BodyGetRotinas>() {
-            @SuppressLint("NotifyDataSetChanged")
+            @SuppressLint({"NotifyDataSetChanged", "DefaultLocale"})
             @Override
             public void onResponse(Call<BodyGetRotinas> call, Response<BodyGetRotinas> response) {
                 if (response.isSuccessful()) {
-                    for (RotinaModel rotina : response.body().get$values()) {
-                        Log.d("mayara", "onResponse: " + rotina.getIngestao());
+
+                    todasRotinasDiaria.addAll(response.body().get$values());
+                    configurarGrafico();
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    dateFormat.setLenient(false);
+
+                    float mediaAgua = 0.0f;
+                    int divisor = 1;
+                    Date ultimoRotina = null;
+                    for (RotinaModel rotina : todasRotinasDiaria) {
+
+
+                        try {
+                            Date dataRotinaAtual = dateFormat.parse(rotina.getIngestao());
+
+                            if ( ultimoRotina == null) {
+                                ultimoRotina = dataRotinaAtual;
+                            }
+
+                            if ( !ultimoRotina.equals(dataRotinaAtual)){
+                                divisor++;
+                            }
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        mediaAgua += rotina.getMlIngerido();
+
                         if (HackUtil.isToday(rotina.getIngestao())) {
                             rotinasDiaria.add(rotina);
                         }
                     }
+
+                    mainBinding.textMedia.setText(String.format("%.2fL", (mediaAgua / divisor) / 1000));
                     adapterAguaDiaria.notifyDataSetChanged();
                 } else {
                     Toast.makeText(RelatorioActivity.this, "Problema no servidor...", Toast.LENGTH_SHORT).show();
@@ -92,90 +123,59 @@ public class RelatorioActivity extends AppCompatActivity {
         });
     }
 
-    private void showBarChart() {
-        ArrayList<Double> valueList = new ArrayList<Double>();
+    private void configurarGrafico() {
         ArrayList<BarEntry> entries = new ArrayList<>();
-        String title = "Title";
 
-        //input data
-        for (int i = 0; i < 6; i++) {
-            valueList.add(i * 100.1);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+
+        int eixoX = 1;
+        Date ultimoRotina = null;
+        int somaQuantiade = 0;
+        boolean acabouSoComUmDado = true;
+
+        for (RotinaModel rotina : todasRotinasDiaria) {
+            try {
+                Date dataRotinaAtual = dateFormat.parse(rotina.getIngestao());
+
+                if (ultimoRotina == null) {
+                    ultimoRotina = dataRotinaAtual;
+                }
+
+                if (dataRotinaAtual.equals(ultimoRotina)) {
+                    somaQuantiade += rotina.getMlIngerido();
+                } else {
+                    acabouSoComUmDado = false;
+                    ultimoRotina = dataRotinaAtual;
+                    somaQuantiade = 0;
+                    somaQuantiade += rotina.getMlIngerido();
+                    entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
+                    eixoX++;
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-        //fit the data into a bar
-        for (int i = 0; i < valueList.size(); i++) {
-            BarEntry barEntry = new BarEntry(i, valueList.get(i).floatValue());
-            entries.add(barEntry);
+        if (acabouSoComUmDado) {
+            entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
         }
 
-        BarDataSet barDataSet = new BarDataSet(entries, title);
-        initBarDataSet(barDataSet);
-        BarData data = new BarData(barDataSet);
-        mainBinding.chart.setData(data);
-        mainBinding.chart.invalidate();
-    }
-
-    private void initBarDataSet(BarDataSet barDataSet) {
-        //Changing the color of the bar
+        BarDataSet barDataSet = new BarDataSet(entries, "Quantidade de Água Ingerida em Litros");
         barDataSet.setColor(ContextCompat.getColor(this, R.color.ciano));
-        //Setting the size of the form in the legend
-        barDataSet.setFormSize(15f);
-        //showing the value of the bar, default true if not set
-        barDataSet.setDrawValues(false);
-        //setting the text size of the value of the bar
-        barDataSet.setValueTextSize(12f);
-        //change color text
-        barDataSet.setValueTextColor(Color.WHITE);
-    }
 
-    private void initBarChart() {
-        //hiding the grey background of the chart, default false if not set
-        mainBinding.chart.setDrawGridBackground(false);
-        //remove the bar shadow, default false if not set
-        mainBinding.chart.setDrawBarShadow(false);
-        //remove border of the chart, default false if not set
-        mainBinding.chart.setDrawBorders(false);
+        BarData barData = new BarData(barDataSet);
 
-        //remove the description label text located at the lower right corner
-        Description description = new Description();
-        description.setEnabled(false);
-        mainBinding.chart.setDescription(description);
-
-        //setting animation for y-axis, the bar will pop up from 0 to its value within the time we set
-        mainBinding.chart.animateY(1000);
-        //setting animation for x-axis, the bar will pop up separately within the time we set
-        mainBinding.chart.animateX(1000);
-
+        // Customize X-axis
         XAxis xAxis = mainBinding.chart.getXAxis();
-        //change the position of x-axis to the bottom
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        //set the horizontal distance of the grid line
         xAxis.setGranularity(1f);
-        //hiding the x-axis line, default true if not set
-        xAxis.setDrawAxisLine(false);
-        //hiding the vertical grid lines, default true if not set
         xAxis.setDrawGridLines(false);
 
-        YAxis leftAxis = mainBinding.chart.getAxisLeft();
-        //hiding the left y-axis line, default true if not set
-        leftAxis.setDrawAxisLine(false);
+        mainBinding.chart.setData(barData);
+        mainBinding.chart.setFitBars(true);
 
-        YAxis rightAxis = mainBinding.chart.getAxisRight();
-        //hiding the right y-axis line, default true if not set
-        rightAxis.setDrawAxisLine(false);
-
-        Legend legend = mainBinding.chart.getLegend();
-        //setting the shape of the legend form to line, default square shape
-        legend.setForm(Legend.LegendForm.LINE);
-        //setting the text size of the legend
-        legend.setTextSize(11f);
-        //setting the alignment of legend toward the chart
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
-        //setting the stacking direction of legend
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-        //setting the location of legend outside the chart, default false if not set
-        legend.setDrawInside(false);
-
+        mainBinding.chart.invalidate();
     }
 }
