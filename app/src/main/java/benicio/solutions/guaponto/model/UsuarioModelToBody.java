@@ -1,43 +1,13 @@
 package benicio.solutions.guaponto.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-public class UsuarioModel {
+public class UsuarioModelToBody  {
     String email = "", senha = "", nome = "", sobrenome = "";
     String dataNascimento = "";
     String rotinaAcorda = "", rotinaDorme = "";
     double peso = 0, altura = 0;
-
-    int id;
     int idade = 0, mediaAgua = 0;
 
-    RotinasUser rotinas;
-
-    @Override
-    public String toString() {
-        return "UsuarioModel{" +
-                "email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", nome='" + nome + '\'' +
-                ", sobrenome='" + sobrenome + '\'' +
-                ", dataNascimento='" + dataNascimento + '\'' +
-                ", rotinaAcorda='" + rotinaAcorda + '\'' +
-                ", rotinaDorme='" + rotinaDorme + '\'' +
-                ", peso=" + peso +
-                ", altura=" + altura +
-                ", id=" + id +
-                ", idade=" + idade +
-                ", mediaAgua=" + mediaAgua +
-                ", rotinas=" + rotinas +
-                '}';
-    }
-
-    public UsuarioModel() {
+    public UsuarioModelToBody() {
     }
 
     public double getAltura() {
@@ -48,13 +18,7 @@ public class UsuarioModel {
         this.altura = altura;
     }
 
-    public RotinasUser getRotinas() {
-        return rotinas;
-    }
 
-    public void setRotinas(RotinasUser rotinas) {
-        this.rotinas = rotinas;
-    }
 
     public String getEmail() {
         return email;
@@ -120,13 +84,6 @@ public class UsuarioModel {
         this.peso = peso;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public int getIdade() {
         return idade;

@@ -4,6 +4,7 @@ import benicio.solutions.guaponto.model.BodyGetRotinas;
 import benicio.solutions.guaponto.model.BodyGetllAllUsers;
 import benicio.solutions.guaponto.model.RotinaModel;
 import benicio.solutions.guaponto.model.UsuarioModel;
+import benicio.solutions.guaponto.model.UsuarioModelToBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -26,6 +27,6 @@ public interface ServiceApi {
     Call<UsuarioModel> getUser(@Path("id") int id);
 
     @POST("api/usuarios/PostUsuario")
-    Call<UsuarioModel> postUsuario(@Body UsuarioModel usuarioModel);
+    Call<UsuarioModel> postUsuario(@Body UsuarioModelToBody usuarioModel);
 
 }

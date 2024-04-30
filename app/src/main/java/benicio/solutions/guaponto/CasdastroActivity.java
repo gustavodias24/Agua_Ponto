@@ -21,6 +21,7 @@ import java.util.Date;
 
 import benicio.solutions.guaponto.databinding.ActivityCasdastroBinding;
 import benicio.solutions.guaponto.model.UsuarioModel;
+import benicio.solutions.guaponto.model.UsuarioModelToBody;
 import benicio.solutions.guaponto.retrofitUtils.RetrofitUtil;
 import benicio.solutions.guaponto.utils.PrefsUser;
 import retrofit2.Call;
@@ -30,7 +31,7 @@ import retrofit2.Response;
 public class CasdastroActivity extends AppCompatActivity {
 
     private ActivityCasdastroBinding mainBinding;
-    private UsuarioModel usuarioModel;
+    private UsuarioModelToBody usuarioModel;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -42,7 +43,7 @@ public class CasdastroActivity extends AppCompatActivity {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        usuarioModel = new UsuarioModel();
+        usuarioModel = new UsuarioModelToBody();
 
 
         mainBinding.cadastrar.setOnClickListener(v -> {
@@ -97,7 +98,6 @@ public class CasdastroActivity extends AppCompatActivity {
                         } else {
                             Log.d("mayara", "onResponse: " + response.code());
                             Log.d("mayara", "onResponse: " + response.message());
-                            Log.d("mayara", "onResponse: " + usuarioModel.toString());
                             Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
                         }
                     }
