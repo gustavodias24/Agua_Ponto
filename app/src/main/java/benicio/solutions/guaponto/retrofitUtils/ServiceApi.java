@@ -17,7 +17,10 @@ public interface ServiceApi {
     @POST("api/rotina/PostRotina")
     Call<Void> postRotina(@Body RotinaModel rotinaModel);
 
-    @GET("/api/usuarios/GetUsuario/{id}")
+    @GET("api/usuarios/GetUsuario/{id}")
     Call<UsuarioModel> getUser(@Path("id") int id);
+
+    @POST("api/usuarios/PostUsuario")
+    Call<UsuarioModel> postUsuario (@Body UsuarioModel usuarioModel);
 
 }

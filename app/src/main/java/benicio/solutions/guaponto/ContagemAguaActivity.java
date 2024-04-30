@@ -134,7 +134,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
                     mainBinding.saudacao.setText("Olá, " + response.body().getNome());
                     int counter = 0;
                     for (RotinaModel rotinaModel : response.body().getRotinas().get$values()) {
-                        if (HackUtil.isDateTimeString(rotinaModel.getIngestao())) {
+                        if (HackUtil.isToday(rotinaModel.getIngestao())) {
                             counter += rotinaModel.getMlIngerido();
                         }
                     }

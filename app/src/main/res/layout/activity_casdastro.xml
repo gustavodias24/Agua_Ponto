@@ -128,6 +128,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="datetime"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 
@@ -150,6 +151,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="number"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 
@@ -163,6 +165,7 @@
             android:layout_marginTop="8dp"
             android:hint="Altura (Ex: 1.70)"
             android:textColorHint="@color/white"
+            android:visibility="gone"
             app:boxStrokeColor="@color/white"
             app:boxStrokeErrorColor="@color/white"
             app:cursorColor="#FFFFFF"
@@ -194,6 +197,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="datetime|time"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 
@@ -216,6 +220,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="datetime|time"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 

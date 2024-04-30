@@ -1,10 +1,16 @@
 package benicio.solutions.guaponto.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class UsuarioModel {
-    String email, senha, nome, sobrenome, dataNascimento, rotinaAcorda, rotinaDorme;
+    String email, senha, nome, sobrenome;
+    String dataNascimento;
+    String rotinaAcorda, rotinaDorme;
     double peso;
     int id, idade, mediaAgua;
     RotinasUser rotinas;

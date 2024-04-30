@@ -1,5 +1,7 @@
 package benicio.solutions.guaponto.utils;
 
+import android.util.Log;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -24,15 +26,20 @@ public class HackUtil {
         }
     }
 
-    public static boolean isDateTimeString(String dateString) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSS");
+    public static boolean isToday(String dateString) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false); // Para evitar interpretações estranhas
 
         try {
             Date date = dateFormat.parse(dateString);
-            return date != null;
+            if (date != null) {
+                Date today = new Date(); // Data de hoje
+
+                return dateFormat.format(today).equals(dateFormat.format(date));
+            }
         } catch (ParseException e) {
-            return false;
+            // Tratamento de exceção
         }
+        return false;
     }
 }
