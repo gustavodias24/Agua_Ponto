@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class CasdastroActivity extends AppCompatActivity {
     private ActivityCasdastroBinding mainBinding;
     private UsuarioModelToBody usuarioModel;
 
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,55 @@ public class CasdastroActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         usuarioModel = new UsuarioModelToBody();
+
+        if (getIntent().getExtras() != null) {
+            mainBinding.Titulo1.setText("Alterar Dados");
+            mainBinding.subTitulo1.setVisibility(View.GONE);
+            mainBinding.cadastrar.setText("Salvar\nalterações");
+            mainBinding.senhaField.setVisibility(View.GONE);
+
+
+            RetrofitUtil.createServiceApi(
+                    RetrofitUtil.createRetrofit()
+            ).getUser(
+                    PrefsUser.getPrefsUsers(this).getInt("id", 0)
+            ).enqueue(new Callback<UsuarioModel>() {
+                @Override
+                public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
+                    if (response.isSuccessful()) {
+                        mainBinding.NomeField.getEditText().setText(
+                                response.body().getNome()
+                        );
+                        mainBinding.emailField.getEditText().setText(
+                                response.body().getEmail()
+                        );
+                        mainBinding.senhaField.getEditText().setText(
+                                response.body().getSenha()
+                        );
+                        mainBinding.nascimentoField.getEditText().setText(
+                                response.body().getDataNascimento()
+                        );
+                        mainBinding.pesoField.getEditText().setText(
+                                response.body().getPeso() + ""
+                        );
+                        mainBinding.alturaField.getEditText().setText(
+                                response.body().getAltura() + ""
+                        );
+                        mainBinding.horaAcordaField.getEditText().setText(
+                                response.body().getRotinaAcorda()
+                        );
+                        mainBinding.horaDormeField.getEditText().setText(
+                                response.body().getRotinaDorme()
+                        );
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
+
+                }
+            });
+        }
 
 
         mainBinding.cadastrar.setOnClickListener(v -> {
@@ -63,18 +114,19 @@ public class CasdastroActivity extends AppCompatActivity {
             usuarioModel.setRotinaAcorda(horaAcorda);
             usuarioModel.setRotinaDorme(horaDorme);
 
-            int pesoInt = 0;
+            double pesoDouble = 0;
             try {
                 String peso = mainBinding.pesoField.getEditText().getText().toString();
-                pesoInt = Integer.parseInt(peso);
+                pesoDouble = Double.parseDouble(peso.trim().replace(",", "."));
             } catch (Exception ignored) {
             }
 
             double alturaDouble = 0;
-            try{
+            try {
                 String altura = mainBinding.alturaField.getEditText().getText().toString();
                 alturaDouble = Double.parseDouble(altura.trim().replace(",", "."));
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
 
 
             usuarioModel.setAltura(alturaDouble);
@@ -82,31 +134,50 @@ public class CasdastroActivity extends AppCompatActivity {
             usuarioModel.setNome(nome);
             usuarioModel.setEmail(email);
             usuarioModel.setSenha(senha);
-            usuarioModel.setPeso(pesoInt);
+            usuarioModel.setPeso(pesoDouble);
 
             if (prosseguir) {
-                Toast.makeText(this, "Cadastrando...", Toast.LENGTH_SHORT).show();
-                RetrofitUtil.createServiceApi(
-                        RetrofitUtil.createRetrofit()
-                ).postUsuario(usuarioModel).enqueue(new Callback<UsuarioModel>() {
-                    @Override
-                    public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
-                        if (response.isSuccessful()) {
-                            finish();
-                            PrefsUser.getEditorUsers(CasdastroActivity.this).putInt("id", response.body().getId()).apply();
-                            startActivity(new Intent(CasdastroActivity.this, ContagemAguaActivity.class));
-                        } else {
-                            Log.d("mayara", "onResponse: " + response.code());
-                            Log.d("mayara", "onResponse: " + response.message());
+                if (getIntent().getExtras() != null){
+                    Toast.makeText(this, "Atualizando...", Toast.LENGTH_SHORT).show();
+                    RetrofitUtil.createServiceApi(
+                            RetrofitUtil.createRetrofit()
+                    ).updateUsuario(usuarioModel, PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(CasdastroActivity.this, "Dados atualizados!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable throwable) {
                             Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
                         }
-                    }
+                    });
+                }else{
+                    Toast.makeText(this, "Cadastrando...", Toast.LENGTH_SHORT).show();
+                    RetrofitUtil.createServiceApi(
+                            RetrofitUtil.createRetrofit()
+                    ).postUsuario(usuarioModel).enqueue(new Callback<UsuarioModel>() {
+                        @Override
+                        public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
+                            if (response.isSuccessful()) {
+                                finish();
+                                PrefsUser.getEditorUsers(CasdastroActivity.this).putInt("id", response.body().getId()).apply();
+                                startActivity(new Intent(CasdastroActivity.this, ContagemAguaActivity.class));
+                            } else {
+                                Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-                    @Override
-                    public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
-                        Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
+                            Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
 
         });

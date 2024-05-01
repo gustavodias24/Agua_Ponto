@@ -114,6 +114,11 @@ public class ContagemAguaActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.Relatorio) {
                 startActivity(new Intent(this, RelatorioActivity.class));
                 return true;
+            }else if ( item.getItemId() == R.id.Config){
+                Intent i = new Intent(this, CasdastroActivity.class);
+                i.putExtra("update", true);
+                startActivity(i);
+                return true;
             }
             return false;
         });

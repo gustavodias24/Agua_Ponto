@@ -3,5 +3,8 @@
         <item
             android:id="@+id/Relatorio"
             android:title="Relatório" />
+        <item
+            android:id="@+id/Config"
+            android:title="Configurações" />
         <!-- Adicione mais itens de menu aqui, se necessário -->
 </menu>

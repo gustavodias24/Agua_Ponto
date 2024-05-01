@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitUtil {
 
     public static Retrofit createRetrofit(){
-        return new Retrofit.Builder().baseUrl("https://apiaguaponto.azurewebsites.net/")
+        return new Retrofit.Builder().baseUrl("https://apiaguaponto2024.azurewebsites.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }

@@ -23,6 +23,7 @@
             app:srcCompat="@drawable/logo" />
 
         <TextView
+            android:id="@+id/Titulo1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -32,6 +33,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/subTitulo1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -97,6 +99,7 @@
             android:layout_marginTop="8dp"
             android:hint="Senha"
             android:textColorHint="@color/white"
+            android:visibility="visible"
             app:boxStrokeColor="@color/white"
             app:boxStrokeErrorColor="@color/white"
             app:cursorColor="#FFFFFF"
@@ -151,7 +154,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
+                android:inputType="number|numberDecimal|numberSigned"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 
