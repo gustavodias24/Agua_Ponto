@@ -9,6 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 public interface ServiceApi {
@@ -28,5 +29,8 @@ public interface ServiceApi {
 
     @POST("api/usuarios/PostUsuario")
     Call<UsuarioModel> postUsuario(@Body UsuarioModelToBody usuarioModel);
+
+    @PUT("/api/usuarios/UpdateUsuario/{id}")
+    Call<Void> updateUsuario(@Body UsuarioModelToBody usuarioModel, @Path("id") int id);
 
 }

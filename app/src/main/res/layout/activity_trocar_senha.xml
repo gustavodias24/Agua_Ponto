@@ -33,12 +33,12 @@
             android:textStyle="bold" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/senhaField"
+            android:id="@+id/emailField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Digite sua senha"
+            android:hint="Digite seu email"
             android:textColorHint="@color/white"
             app:boxStrokeColor="@color/white"
             app:boxStrokeErrorColor="@color/white"
@@ -55,13 +55,13 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/denovoSenhaField"
+            android:id="@+id/novaSenhaField"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:foregroundTint="#FFFFFF"
-            android:hint="Digite sua senha novamente"
+            android:hint="Digite sua nova senha"
             android:textColorHint="@color/white"
             app:boxStrokeColor="@color/white"
             app:boxStrokeErrorColor="@color/white"

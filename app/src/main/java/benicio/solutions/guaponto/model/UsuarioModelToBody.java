@@ -10,6 +10,20 @@ public class UsuarioModelToBody  {
     public UsuarioModelToBody() {
     }
 
+    public UsuarioModelToBody(String email, String senha, String nome, String sobrenome, String dataNascimento, String rotinaAcorda, String rotinaDorme, double peso, double altura, int idade, int mediaAgua) {
+        this.email = email;
+        this.senha = senha;
+        this.nome = nome;
+        this.sobrenome = sobrenome;
+        this.dataNascimento = dataNascimento;
+        this.rotinaAcorda = rotinaAcorda;
+        this.rotinaDorme = rotinaDorme;
+        this.peso = peso;
+        this.altura = altura;
+        this.idade = idade;
+        this.mediaAgua = mediaAgua;
+    }
+
     public double getAltura() {
         return altura;
     }

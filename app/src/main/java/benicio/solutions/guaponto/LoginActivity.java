@@ -44,9 +44,10 @@ public class LoginActivity extends AppCompatActivity {
 
             Toast.makeText(this, "Logando...", Toast.LENGTH_SHORT).show();
 
-            String email, senha;
+            String email, senha, senhaNormal;
 
             email = mainBinding.emailField.getEditText().getText().toString().trim();
+            senhaNormal = mainBinding.senhaField.getEditText().getText().toString().trim();
             senha = HackUtil.gerarHash(mainBinding.senhaField.getEditText().getText().toString().trim());
 
             RetrofitUtil.createServiceApi(
@@ -59,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         boolean encontrado = false;
                         for (UsuarioModel user : users.get$values()) {
-                            if( user.getEmail().equals(email) && user.getSenha().equals(senha)){
+                            if( user.getEmail().equals(email) && (user.getSenha().equals(senha) || user.getSenha().equals(senhaNormal)) ){
                                 finish();
                                 PrefsUser.getEditorUsers(LoginActivity.this).putInt("id", user.getId()).apply();
                                 encontrado = true;
