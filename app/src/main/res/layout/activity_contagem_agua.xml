@@ -32,11 +32,11 @@
         app:srcCompat="@drawable/copo" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/metaText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Sua meta é\n2500ml"
+        android:text="Sua meta é\nCarregando..."
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
@@ -51,7 +51,7 @@
         android:textColor="#FFFFFF"
         android:textSize="96sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toTopOf="@+id/metaText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -84,7 +84,7 @@
             android:id="@+id/saudacao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:text="Olá, [ user ]"

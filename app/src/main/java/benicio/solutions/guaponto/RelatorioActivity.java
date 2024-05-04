@@ -2,12 +2,19 @@ package benicio.solutions.guaponto;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
@@ -29,12 +36,15 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import benicio.solutions.guaponto.adapter.AdapterAguaDiaria;
 import benicio.solutions.guaponto.databinding.ActivityRelatorioBinding;
 import benicio.solutions.guaponto.model.AguaModel;
 import benicio.solutions.guaponto.model.BodyGetRotinas;
+import benicio.solutions.guaponto.model.ConsumoAgua;
 import benicio.solutions.guaponto.model.RotinaModel;
 import benicio.solutions.guaponto.retrofitUtils.RetrofitUtil;
 import benicio.solutions.guaponto.utils.HackUtil;
@@ -71,6 +81,7 @@ public class RelatorioActivity extends AppCompatActivity {
         mainBinding.recy.setAdapter(adapterAguaDiaria);
 
         RetrofitUtil.createServiceApi(RetrofitUtil.createRetrofit()).getRotinas(PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<BodyGetRotinas>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @SuppressLint({"NotifyDataSetChanged", "DefaultLocale"})
             @Override
             public void onResponse(Call<BodyGetRotinas> call, Response<BodyGetRotinas> response) {
@@ -91,11 +102,11 @@ public class RelatorioActivity extends AppCompatActivity {
                         try {
                             Date dataRotinaAtual = dateFormat.parse(rotina.getIngestao());
 
-                            if ( ultimoRotina == null) {
+                            if (ultimoRotina == null) {
                                 ultimoRotina = dataRotinaAtual;
                             }
 
-                            if ( !ultimoRotina.equals(dataRotinaAtual)){
+                            if (!ultimoRotina.equals(dataRotinaAtual)) {
                                 divisor++;
                             }
                         } catch (ParseException e) {
@@ -109,7 +120,10 @@ public class RelatorioActivity extends AppCompatActivity {
                         }
                     }
 
-                    mainBinding.textMedia.setText(String.format("%.2fL", (mediaAgua / divisor) / 1000));
+
+                    mainBinding.textMedia.setText(Html.fromHtml("Sua média semanal de consumo foi de <b>" + String.format("%.2fL", (mediaAgua / divisor) / 1000) + "</b>"));
+
+
                     adapterAguaDiaria.notifyDataSetChanged();
                 } else {
                     Toast.makeText(RelatorioActivity.this, "Problema no servidor...", Toast.LENGTH_SHORT).show();
@@ -123,44 +137,61 @@ public class RelatorioActivity extends AppCompatActivity {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void configurarGrafico() {
         ArrayList<BarEntry> entries = new ArrayList<>();
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         dateFormat.setLenient(false);
 
-        int eixoX = 1;
-        Date ultimoRotina = null;
-        int somaQuantiade = 0;
-        boolean acabouSoComUmDado = true;
+        List<Map<String, Object>> ingestoes = new ArrayList<>();
 
-        for (RotinaModel rotina : todasRotinasDiaria) {
-            try {
-                Date dataRotinaAtual = dateFormat.parse(rotina.getIngestao());
-
-                if (ultimoRotina == null) {
-                    ultimoRotina = dataRotinaAtual;
-                }
-
-                if (dataRotinaAtual.equals(ultimoRotina)) {
-                    somaQuantiade += rotina.getMlIngerido();
-                } else {
-                    acabouSoComUmDado = false;
-                    ultimoRotina = dataRotinaAtual;
-                    somaQuantiade = 0;
-                    somaQuantiade += rotina.getMlIngerido();
-                    entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
-                    eixoX++;
-                }
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
-            }
-
+        for (RotinaModel rotinaModel : todasRotinasDiaria) {
+            ingestoes.add(Map.of(
+                    "ingestao", rotinaModel.getIngestao(),
+                    "mlIngerido", rotinaModel.getMlIngerido()
+            ));
         }
 
-        if (acabouSoComUmDado) {
-            entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
+        List<ConsumoAgua> consumoAgua = ConsumoAgua.calcularConsumoAgua(ingestoes);
+
+        for (ConsumoAgua c : consumoAgua) {
+            Log.d("mayara", "Dia: " + c.getDia() + "\nQuantidade: " + c.getQuantidadeDeAguaDoDia());
+            entries.add(new BarEntry(c.getDia(), (float) c.getQuantidadeDeAguaDoDia() / 1000));
         }
+
+//        int eixoX = 1;
+//        Date ultimoRotina = null;
+//        int somaQuantiade = 0;
+//        boolean acabouSoComUmDado = true;
+//
+//        for (RotinaModel rotina : todasRotinasDiaria) {
+//            try {
+//                Date dataRotinaAtual = dateFormat.parse(rotina.getIngestao());
+//
+//                if (ultimoRotina == null) {
+//                    ultimoRotina = dataRotinaAtual;
+//                }
+//
+//                if (dataRotinaAtual.equals(ultimoRotina)) {
+//                    somaQuantiade += rotina.getMlIngerido();
+//                } else {
+//                    acabouSoComUmDado = false;
+//                    ultimoRotina = dataRotinaAtual;
+//                    somaQuantiade = 0;
+//                    somaQuantiade += rotina.getMlIngerido();
+//                    entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
+//                    eixoX++;
+//                }
+//            } catch (ParseException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//        }
+//
+//        if (acabouSoComUmDado) {
+//            entries.add(new BarEntry(eixoX, (float) somaQuantiade /1000));
+//        }
 
         BarDataSet barDataSet = new BarDataSet(entries, "Quantidade de Água Ingerida em Litros");
         barDataSet.setColor(ContextCompat.getColor(this, R.color.ciano));

@@ -47,11 +47,14 @@ public class CasdastroActivity extends AppCompatActivity {
 
         usuarioModel = new UsuarioModelToBody();
 
+        mainBinding.voltar.setOnClickListener(v -> finish());
+
         if (getIntent().getExtras() != null) {
             mainBinding.Titulo1.setText("Alterar Dados");
             mainBinding.subTitulo1.setVisibility(View.GONE);
-            mainBinding.cadastrar.setText("Salvar\nalterações");
+            mainBinding.cadastrar.setText("Salvar alterações");
             mainBinding.senhaField.setVisibility(View.GONE);
+            mainBinding.confirmarSenhaField.setVisibility(View.GONE);
 
 
             RetrofitUtil.createServiceApi(
@@ -64,6 +67,9 @@ public class CasdastroActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         mainBinding.NomeField.getEditText().setText(
                                 response.body().getNome()
+                        );
+                        mainBinding.sobreNomeField.getEditText().setText(
+                                response.body().getSobrenome()
                         );
                         mainBinding.emailField.getEditText().setText(
                                 response.body().getEmail()
@@ -102,8 +108,10 @@ public class CasdastroActivity extends AppCompatActivity {
             boolean prosseguir = true;
 
             String nome = mainBinding.NomeField.getEditText().getText().toString();
+            String sobreNome = mainBinding.sobreNomeField.getEditText().getText().toString();
             String email = mainBinding.emailField.getEditText().getText().toString();
             String senha = mainBinding.senhaField.getEditText().getText().toString();
+            String confirmarSenha = mainBinding.confirmarSenhaField.getEditText().getText().toString();
 
             String nascimento = mainBinding.nascimentoField.getEditText().getText().toString();
             String horaAcorda = mainBinding.horaAcordaField.getEditText().getText().toString();
@@ -132,11 +140,17 @@ public class CasdastroActivity extends AppCompatActivity {
             usuarioModel.setAltura(alturaDouble);
 
             usuarioModel.setNome(nome);
+            usuarioModel.setSobrenome(sobreNome);
             usuarioModel.setEmail(email);
             usuarioModel.setSenha(senha);
             usuarioModel.setPeso(pesoDouble);
 
-            if (prosseguir) {
+            if (prosseguir ) {
+
+                PrefsUser.getEditorUsers(CasdastroActivity.this).putInt(
+                        "meta", (int) (pesoDouble * 35)
+                ).apply();
+
                 if (getIntent().getExtras() != null){
                     Toast.makeText(this, "Atualizando...", Toast.LENGTH_SHORT).show();
                     RetrofitUtil.createServiceApi(
@@ -147,7 +161,7 @@ public class CasdastroActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 Toast.makeText(CasdastroActivity.this, "Dados atualizados!", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CasdastroActivity.this, "Problema de validação com sevidor!", Toast.LENGTH_SHORT).show();
                             }
                         }
 
@@ -157,26 +171,30 @@ public class CasdastroActivity extends AppCompatActivity {
                         }
                     });
                 }else{
-                    Toast.makeText(this, "Cadastrando...", Toast.LENGTH_SHORT).show();
-                    RetrofitUtil.createServiceApi(
-                            RetrofitUtil.createRetrofit()
-                    ).postUsuario(usuarioModel).enqueue(new Callback<UsuarioModel>() {
-                        @Override
-                        public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
-                            if (response.isSuccessful()) {
-                                finish();
-                                PrefsUser.getEditorUsers(CasdastroActivity.this).putInt("id", response.body().getId()).apply();
-                                startActivity(new Intent(CasdastroActivity.this, ContagemAguaActivity.class));
-                            } else {
+                    if ( senha.equals(confirmarSenha)){
+                        Toast.makeText(this, "Cadastrando...", Toast.LENGTH_SHORT).show();
+                        RetrofitUtil.createServiceApi(
+                                RetrofitUtil.createRetrofit()
+                        ).postUsuario(usuarioModel).enqueue(new Callback<UsuarioModel>() {
+                            @Override
+                            public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
+                                if (response.isSuccessful()) {
+                                    finish();
+                                    PrefsUser.getEditorUsers(CasdastroActivity.this).putInt("id", response.body().getId()).apply();
+                                    startActivity(new Intent(CasdastroActivity.this, ContagemAguaActivity.class));
+                                } else {
+                                    Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
                                 Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
                             }
-                        }
-
-                        @Override
-                        public void onFailure(Call<UsuarioModel> call, Throwable throwable) {
-                            Toast.makeText(CasdastroActivity.this, "Problema de conexão!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                        });
+                    }else{
+                        Toast.makeText(this, "As senhas não são iguais.", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 

@@ -1,28 +1,10 @@
 package benicio.solutions.guaponto.model;
 
-public class RotinaModel {
-
-    int id;
+public class BodyPostRotina {
     int mlIngerido, usuarioId;
     String ingestao;
 
-    public RotinaModel() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getIngestao() {
-        return ingestao;
-    }
-
-    public void setIngestao(String ingestao) {
-        this.ingestao = ingestao;
+    public BodyPostRotina() {
     }
 
     public int getMlIngerido() {
@@ -39,5 +21,13 @@ public class RotinaModel {
 
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public String getIngestao() {
+        return ingestao;
+    }
+
+    public void setIngestao(String ingestao) {
+        this.ingestao = ingestao;
     }
 }

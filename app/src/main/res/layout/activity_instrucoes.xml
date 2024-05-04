@@ -21,6 +21,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -29,17 +31,22 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/img1" />
+                android:layout_marginTop="64dp"
+                android:foregroundGravity="clip_horizontal"
+                android:src="@drawable/img1"
+                android:textAlignment="center" />
 
             <TextView
                 android:id="@+id/titulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
+                android:foregroundGravity="clip_horizontal"
                 android:gravity="center|top"
                 android:text="Bem-vindo(a)\nao Água Ponto!"
+                android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -48,11 +55,14 @@
                 android:id="@+id/subtitulo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
+                android:foregroundGravity="clip_horizontal"
                 android:gravity="center|top"
                 android:text="O melhor aplicativo para te auxiliar a manter a hidratação em dia."
+                android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp" />
 
@@ -63,6 +73,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="120dp"
                 android:backgroundTint="@color/ciano"
+                android:foregroundGravity="clip_horizontal"
                 android:text="Continuar"
                 android:textColor="#000000"
                 android:textSize="16sp"

@@ -6,5 +6,9 @@
         <item
             android:id="@+id/Config"
             android:title="Configurações" />
+
+        <item
+            android:id="@+id/deslogar"
+            android:title="Sair" />
         <!-- Adicione mais itens de menu aqui, se necessário -->
 </menu>

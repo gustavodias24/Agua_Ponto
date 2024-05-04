@@ -36,8 +36,7 @@ public class InstrucoesActivity extends AppCompatActivity {
 
         String[] titulos = {"Registre o seu consumo de água", "Não esqueça de beber água!"};
 
-        String[] subTitulos = {"Registre seu consumo diário de água e acompanhe com nosso relatório.", "Sabemos que você esquece de tomar água." +
-                "Estamos aqui para te lembrar!"};
+        String[] subTitulos = {"Registre seu consumo diário de água e acompanhe com nosso relatório.", "Sabemos que você esquece de tomar água. Estamos aqui para te lembrar!"};
 
         int[] fotos = {R.drawable.img2, R.drawable.img3};
 

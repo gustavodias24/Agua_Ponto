@@ -44,6 +44,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("io.github.vicmikhailau:MaskedEditText:5.0.1")
 
     implementation(libs.appcompat)
     implementation(libs.material)

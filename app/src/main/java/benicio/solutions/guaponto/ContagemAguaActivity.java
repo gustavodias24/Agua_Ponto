@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import benicio.solutions.guaponto.databinding.ActivityContagemAguaBinding;
 import benicio.solutions.guaponto.databinding.ActivityLoginBinding;
 import benicio.solutions.guaponto.databinding.DefinirAguaIngeridaLayoutBinding;
+import benicio.solutions.guaponto.model.BodyPostRotina;
 import benicio.solutions.guaponto.model.RotinaModel;
 import benicio.solutions.guaponto.model.UsuarioModel;
 import benicio.solutions.guaponto.retrofitUtils.RetrofitUtil;
@@ -59,7 +61,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
 
         viewDialog.confirmar.setOnClickListener(v -> {
 
-            RotinaModel rotinaModel = new RotinaModel();
+            BodyPostRotina rotinaModel = new BodyPostRotina();
 
             Toast.makeText(this, "Cadastrando...", Toast.LENGTH_SHORT).show();
 
@@ -86,7 +88,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
                             viewDialog.mlField.getEditText().setText("");
                             atualizarMl();
                         } else {
-                            Toast.makeText(ContagemAguaActivity.this, "Erro de conexão.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ContagemAguaActivity.this, "Problema no servidor.", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -119,6 +121,9 @@ public class ContagemAguaActivity extends AppCompatActivity {
                 i.putExtra("update", true);
                 startActivity(i);
                 return true;
+            }else if ( item.getItemId() == R.id.deslogar){
+                finish();
+                startActivity(new Intent(this , LoginActivity.class));
             }
             return false;
         });
@@ -137,6 +142,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
 
                     mainBinding.saudacao.setText("Olá, " + response.body().getNome());
+                    mainBinding.metaText.setText("Sua meta é\n" + PrefsUser.getPrefsUsers(ContagemAguaActivity.this).getInt("meta", 0) + "ml");
                     int counter = 0;
                     for (RotinaModel rotinaModel : response.body().getRotinas().get$values()) {
                         if (HackUtil.isToday(rotinaModel.getIngestao())) {
@@ -156,5 +162,9 @@ public class ContagemAguaActivity extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        atualizarMl();
+    }
 }

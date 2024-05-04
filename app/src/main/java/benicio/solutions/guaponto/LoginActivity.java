@@ -64,6 +64,10 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                                 PrefsUser.getEditorUsers(LoginActivity.this).putInt("id", user.getId()).apply();
                                 encontrado = true;
+
+                                PrefsUser.getEditorUsers(LoginActivity.this).putInt(
+                                        "meta", (int) (user.getPeso() * 35)
+                                ).apply();
                                 startActivity(new Intent(LoginActivity.this, ContagemAguaActivity.class));
                             }
                         }

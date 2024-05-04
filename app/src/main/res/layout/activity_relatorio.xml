@@ -16,30 +16,31 @@
         tools:context=".RelatorioActivity">
 
 
+        <ImageButton
+            android:id="@+id/voltar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="#00FFFFFF"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/backbutton" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/voltar"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center_vertical"
-                android:backgroundTint="#00FFFFFF"
-                android:scaleType="centerInside"
-                app:srcCompat="@drawable/backbutton" />
 
             <TextView
 
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 android:layout_weight="1"
                 android:gravity="center_horizontal"
                 android:text="Relatório"
                 android:textColor="#FFFFFF"
-                android:textSize="48sp"
+                android:textSize="34sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -75,21 +76,13 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Sua média semanal de consumo foi de"
-                        android:textColor="#000000" />
-
-                    <TextView
                         android:id="@+id/textMedia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
+                        android:layout_weight="1"
                         android:text="Carregando..."
-                        android:textColor="#000000"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:textColor="#000000" />
+
                 </LinearLayout>
 
             </LinearLayout>
