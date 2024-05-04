@@ -135,11 +135,14 @@
             app:boxStrokeErrorColor="@color/white"
             app:cursorColor="#FFFFFF"
             app:hintTextColor="@color/white"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white"
             app:placeholderTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:password="true"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 
@@ -158,11 +161,14 @@
             app:boxStrokeErrorColor="@color/white"
             app:cursorColor="#FFFFFF"
             app:hintTextColor="@color/white"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/white"
             app:placeholderTextColor="@color/white">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:password="true"
                 android:textColor="#FFFFFF"
                 android:textColorLink="#FFFFFF" />
 

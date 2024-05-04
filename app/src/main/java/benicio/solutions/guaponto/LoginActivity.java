@@ -40,6 +40,13 @@ public class LoginActivity extends AppCompatActivity {
         mainBinding.novoCadastro.setOnClickListener(v -> startActivity(new Intent(this, CasdastroActivity.class)));
         mainBinding.esqueceuSenha.setOnClickListener(v -> startActivity(new Intent(this, TrocarSenhaActivity.class)));
 
+
+        if ( PrefsUser.getPrefsUsers(this).getInt("id", 0) != 0){
+            finish();
+            Toast.makeText(this, "Bem vindo de volta!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, ContagemAguaActivity.class));
+        }
+
         mainBinding.entrar.setOnClickListener(v -> {
 
             Toast.makeText(this, "Logando...", Toast.LENGTH_SHORT).show();

@@ -19,6 +19,9 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import benicio.solutions.guaponto.databinding.ActivityContagemAguaBinding;
 import benicio.solutions.guaponto.databinding.ActivityLoginBinding;
 import benicio.solutions.guaponto.databinding.DefinirAguaIngeridaLayoutBinding;
@@ -38,11 +41,15 @@ public class ContagemAguaActivity extends AppCompatActivity {
 
     private Dialog dialogAddAgua;
 
+    private int metadeAgua = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mainBinding = ActivityContagemAguaBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
+
+        metadeAgua = PrefsUser.getPrefsUsers(ContagemAguaActivity.this).getInt("meta", 0);
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -101,7 +108,7 @@ public class ContagemAguaActivity extends AppCompatActivity {
         });
 
 
-//        rotinaModel.setMlIngerido();
+//        rotinaModel.setMlIngerido(); MayBen#2023
         b.setView(viewDialog.getRoot());
         dialogAddAgua = b.create();
     }
@@ -116,14 +123,15 @@ public class ContagemAguaActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.Relatorio) {
                 startActivity(new Intent(this, RelatorioActivity.class));
                 return true;
-            }else if ( item.getItemId() == R.id.Config){
+            } else if (item.getItemId() == R.id.Config) {
                 Intent i = new Intent(this, CasdastroActivity.class);
                 i.putExtra("update", true);
                 startActivity(i);
                 return true;
-            }else if ( item.getItemId() == R.id.deslogar){
+            } else if (item.getItemId() == R.id.deslogar) {
                 finish();
-                startActivity(new Intent(this , LoginActivity.class));
+                PrefsUser.getEditorUsers(this).putInt("id", 0).apply();
+                startActivity(new Intent(this, LoginActivity.class));
             }
             return false;
         });
@@ -136,18 +144,30 @@ public class ContagemAguaActivity extends AppCompatActivity {
         RetrofitUtil.createServiceApi(
                 RetrofitUtil.createRetrofit()
         ).getUser(PrefsUser.getPrefsUsers(this).getInt("id", 0)).enqueue(new Callback<UsuarioModel>() {
-            @SuppressLint("SetTextI18n")
+            @SuppressLint({"SetTextI18n", "SimpleDateFormat"})
             @Override
             public void onResponse(Call<UsuarioModel> call, Response<UsuarioModel> response) {
                 if (response.isSuccessful()) {
 
                     mainBinding.saudacao.setText("Olá, " + response.body().getNome());
-                    mainBinding.metaText.setText("Sua meta é\n" + PrefsUser.getPrefsUsers(ContagemAguaActivity.this).getInt("meta", 0) + "ml");
+                    mainBinding.metaText.setText("Sua meta é\n" + metadeAgua + "ml");
                     int counter = 0;
                     for (RotinaModel rotinaModel : response.body().getRotinas().get$values()) {
                         if (HackUtil.isToday(rotinaModel.getIngestao())) {
                             counter += rotinaModel.getMlIngerido();
                         }
+                    }
+
+                    if (counter >= metadeAgua && !HackUtil.isToday(
+                            PrefsUser.getPrefsUsers(ContagemAguaActivity.this).getString("dataMetaBatida", "")
+                    )) {
+                        AlertDialog.Builder b = new AlertDialog.Builder(ContagemAguaActivity.this);
+                        b.setTitle("Parabéns!");
+                        b.setMessage("A meta de consumo de água de hoje foi atingida!");
+                        b.setPositiveButton("Ok", null);
+                        b.create().show();
+                        PrefsUser.getEditorUsers(ContagemAguaActivity.this).putString("dataMetaBatida",
+                                new SimpleDateFormat("yyyy-MM-dd").format(new Date())).apply();
                     }
                     mainBinding.aguaCounter.setText(counter + "");
                 } else {
